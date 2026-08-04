@@ -1,0 +1,116 @@
+/* css Zen Garden default style v1.02 edited by Tom Lee*/
+/* css released under Creative Commons License - http://creativecommons.org/licenses/by-nc-sa/1.0/  */
+
+/* This file based on 'Tranquille' by Dave Shea */
+
+/* Note to self: Images should be linked as if the CSS file sits in the same folder as the images. ie. no paths. */
+
+
+/* basic elements */
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  text-align: center;
+  padding: 0;
+  margin: 1px 0 0;
+  font: normal 11px Arial, Helvetica, Sans-serif;
+  color: #666;
+
+}
+
+a {
+  color: #777;
+}
+
+a:hover {
+  color: #A77749;
+}
+
+.page-wrapper {
+  text-align: left;
+  background: #FFF;
+  width: auto;
+  margin: auto;
+  position: relative;
+  padding: 0;
+}
+
+header {
+  width: auto;
+  height: 80px;
+  background: #FD9453;
+  margin: 0;
+  padding: 0;
+}
+
+header h1,
+h2 {
+  padding: 0;
+  margin: 0;
+  display: none;
+
+}
+
+footer {
+  background: #FD9453;
+  padding-top: 17px;
+  padding-left: 15px;
+
+}
+
+.form-floating>.form-control-plaintext::placeholder,
+.form-floating>.form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating>.form-control-plaintext:focus::placeholder,
+.form-floating>.form-control:focus::placeholder {
+  text-align: start;
+}
+
+.sidebar {
+  position: absolute;
+  top: 156px;
+  left: 525px;
+  width: 175px;
+  background: #FD9453;
+  border-top: #fff 1px solid;
+  color: #fff;
+}
+
+.sidebar a,
+footer a {
+  color: #FFF;
+  text-decoration: none;
+}
+
+.sidebar a:hover,
+footer a:hover {
+  color: #FCD2B8;
+}
+
+.extra1 {
+  margin: auto;
+  width: 700px;
+  height: 9px;
+  background: #fff;
+}
