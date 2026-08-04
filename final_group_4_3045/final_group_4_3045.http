@@ -1,0 +1,6 @@
+@final_group_4_3045_HostAddress = http://localhost:5253
+
+GET {{final_group_4_3045_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
