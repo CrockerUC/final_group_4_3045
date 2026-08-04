@@ -1,4 +1,5 @@
-
+using final_group_4_3045.Data;
+using Microsoft.EntityFrameworkCore;
 namespace final_group_4_3045
 {
     public class Program
@@ -12,6 +13,9 @@ namespace final_group_4_3045
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+            // Add the database context to the services container (dependency injection)
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 
