@@ -1,5 +1,12 @@
 using final_group_4_3045.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.OpenApi;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi;
+
+
 namespace final_group_4_3045
 {
     public class Program
@@ -10,7 +17,7 @@ namespace final_group_4_3045
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllersWithViews();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             // Add the database context to the services container (dependency injection)
@@ -22,7 +29,14 @@ namespace final_group_4_3045
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                app.UseExceptionHandler("/Home/Error");
                 app.MapOpenApi();
+                app.UseHsts();
+
+                app.UseSwaggerUI(options =>
+                {
+                    options.SwaggerEndpoint("/openapi/v1.json", "v1");
+                });
             }
 
             app.UseHttpsRedirection();
@@ -31,6 +45,13 @@ namespace final_group_4_3045
 
 
             app.MapControllers();
+
+            app.MapStaticAssets();
+
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}")
+                .WithStaticAssets();
 
             app.Run();
         }
