@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using final_group_4_3045.Models;
+using final_group_4_3045.Data;
 
 namespace final_group_4_3045.Controllers;
 
@@ -8,10 +9,14 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    private readonly AppDbContext _context;
+
+    public HomeController(ILogger<HomeController> logger, AppDbContext context)
     {
         _logger = logger;
+        _context = context;
     }
+
 
     public IActionResult Index()
     {
