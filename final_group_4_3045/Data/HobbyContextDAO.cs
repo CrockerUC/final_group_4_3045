@@ -31,8 +31,17 @@ namespace final_group_4_3045.Data
 
         public async Task UpdateHobbyAsync(Hobby hobby)
         {
-            _context.Hobbies.Update(hobby);
-            await _context.SaveChangesAsync();
+            var existingHobby = await _context.Hobbies.FindAsync(hobby.Id);
+
+            if (existingHobby != null)
+            {
+                existingHobby.HobbyName = hobby.HobbyName;
+                existingHobby.Category = hobby.Category;
+                existingHobby.HoursPerWeek = hobby.HoursPerWeek;
+                existingHobby.Indoor = hobby.Indoor;
+
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteHobbyAsync(int id)

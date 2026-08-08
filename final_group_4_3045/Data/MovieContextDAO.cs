@@ -31,8 +31,17 @@ namespace final_group_4_3045.Data
 
         public async Task UpdateMovieAsync(Movie movie)
         {
-            _context.Movies.Update(movie);
-            await _context.SaveChangesAsync();
+            var existingMovie = await _context.Movies.FindAsync(movie.Id);
+
+            if (existingMovie != null)
+            {
+                existingMovie.Title = movie.Title;
+                existingMovie.Genre = movie.Genre;
+                existingMovie.ReleaseYear = movie.ReleaseYear;
+                existingMovie.Rating = movie.Rating;
+
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteMovieAsync(int id)

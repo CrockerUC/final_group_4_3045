@@ -31,8 +31,17 @@ namespace final_group_4_3045.Data
 
         public async Task UpdateTeamMemberAsync(TeamMember teamMember)
         {
-            _context.TeamMembers.Update(teamMember);
-            await _context.SaveChangesAsync();
+            var existingTeamMember = await _context.TeamMembers.FindAsync(teamMember.Id);
+
+            if (existingTeamMember != null)
+            {
+                existingTeamMember.FullName = teamMember.FullName;
+                existingTeamMember.BirthDate = teamMember.BirthDate;
+                existingTeamMember.CollegeProgram = teamMember.CollegeProgram;
+                existingTeamMember.YearInProgram = teamMember.YearInProgram;
+
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteTeamMemberAsync(int id)

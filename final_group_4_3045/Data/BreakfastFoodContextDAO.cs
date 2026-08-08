@@ -31,8 +31,17 @@ namespace final_group_4_3045.Data
 
         public async Task UpdateBreakfastFoodAsync(BreakfastFood breakfastFood)
         {
-            _context.Entry(breakfastFood).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            var existingBreakfastFood = await _context.BreakfastFoods.FindAsync(breakfastFood.Id);
+
+            if (existingBreakfastFood != null)
+            {
+                existingBreakfastFood.Name = breakfastFood.Name;
+                existingBreakfastFood.Categories = breakfastFood.Categories;
+                existingBreakfastFood.Healthy = breakfastFood.Healthy;
+                existingBreakfastFood.Drink = breakfastFood.Drink;
+
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteBreakfastFoodAsync(int id)
