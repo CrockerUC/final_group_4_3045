@@ -48,6 +48,7 @@ namespace final_group_4_3045
                 app.UseOpenApi(); // Enable OpenAPI middleware for API documentation in development environment
                 app.UseSwaggerUI(); // Enable Swagger UI middleware for API documentation in development environment
             }
+            app.UseRouting();
 
             app.UseHttpsRedirection(); // Redirect HTTP requests to HTTPS for secure communication
 

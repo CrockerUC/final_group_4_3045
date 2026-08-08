@@ -4,7 +4,7 @@ using final_group_4_3045.Interfaces;
 
 namespace final_group_4_3045.Data
 {
-    public class HobbyDAO: IHobbyContextDAO
+    public class HobbyDAO : IHobbyContextDAO
     {
         private readonly AppDbContext _context;
 
