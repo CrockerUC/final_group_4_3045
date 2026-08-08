@@ -6,6 +6,8 @@ using final_group_4_3045.Interfaces;
 
 namespace final_group_4_3045.Controllers;
 
+[ApiController]
+[Route("api/[controller]")]
 public class MovieController : ControllerBase
 {
     private readonly ILogger<MovieController> _logger;

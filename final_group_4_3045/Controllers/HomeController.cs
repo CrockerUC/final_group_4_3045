@@ -5,6 +5,7 @@ using final_group_4_3045.Data;
 
 namespace final_group_4_3045.Controllers;
 
+[ApiExplorerSettings(IgnoreApi = true)]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
