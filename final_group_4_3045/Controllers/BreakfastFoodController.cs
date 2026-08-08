@@ -1,16 +1,23 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using final_group_4_3045.Models;
+using final_group_4_3045.Data;
+using System.Reflection.Metadata.Ecma335;
+using final_group_4_3045.Interfaces;
 
 namespace final_group_4_3045.Controllers;
 
+[ApiController]
+[Route("[controller]")]
 public class BreakfastFoodController : Controller
 {
     private readonly ILogger<BreakfastFoodController> _logger;
+    private readonly IBreakfastContextDAO _breakfastDAO;
 
-    public BreakfastFoodController(ILogger<BreakfastFoodController> logger)
+    public BreakfastFoodController(ILogger<BreakfastFoodController> logger, IBreakfastContextDAO breakfastFoodDAO)
     {
         _logger = logger;
+        _breakfastDAO = breakfastFoodDAO;
     }
 
     public IActionResult Index()
@@ -21,11 +28,13 @@ public class BreakfastFoodController : Controller
     /* --------- CRUD METHODS FOR BREAKFASTFOOD MODEL --------- */
 
     // Create the initial table ONLY USE ON INITIALIZATION
-    public IActionResult CreateBreakfastFoodTable()
+    [HttpPost]
+    public async Task<ActionResult<BreakfastFood>> CreateBreakfastFoodTable(BreakfastFood breakfastFood)
     {
         // Logic to create the BreakfastFood table in the database
         // Use entity framework to create the table based on the BreakfastFood model
-        return View("Index");
+        await _breakfastDAO.AddBreakfastFoodAsync(breakfastFood);
+        return Ok(breakfastFood);
     }
 
     public IActionResult ReadBreakfastFood(int? id)

@@ -37,7 +37,16 @@ public class TeamMemberController : Controller
     {
         // Logic to read TeamMember data from the database
         // Use entity framework to retrieve data from the TeamMember table
-        return Ok(_context.TeamMembers.ToList());
+        if (id == null || id == 0)
+        {
+            return Ok(_context.TeamMembers.Take(5).ToList());
+        }
+        var member = _context.TeamMembers.Find(id);
+        if (member == null)
+        {
+            return NotFound();
+        }
+        return Ok(member);
     }
 
     public IActionResult UpdateTeamMember()

@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using final_group_4_3045.Models;
+using final_group_4_3045.Interfaces;
 
 namespace final_group_4_3045.Data
 {
-    public class MovieDAO
+    public class MovieDAO: IMovieContextDAO
     {
         private readonly AppDbContext _context;
 

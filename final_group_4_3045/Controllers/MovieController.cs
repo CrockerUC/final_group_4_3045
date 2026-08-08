@@ -1,16 +1,19 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using final_group_4_3045.Models;
+using final_group_4_3045.Data;
 
 namespace final_group_4_3045.Controllers;
 
 public class MovieController : Controller
 {
     private readonly ILogger<MovieController> _logger;
+    private readonly MovieDAO _movieDAO;
 
-    public MovieController(ILogger<MovieController> logger)
+    public MovieController(ILogger<MovieController> logger, MovieDAO movieDAO)
     {
         _logger = logger;
+        _movieDAO = movieDAO;
     }
 
     public IActionResult Index()
