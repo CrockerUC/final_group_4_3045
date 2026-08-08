@@ -2,70 +2,87 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using final_group_4_3045.Models;
 using final_group_4_3045.Data;
+using final_group_4_3045.Interfaces;
 
 namespace final_group_4_3045.Controllers;
 
-public class TeamMemberController : Controller
+public class TeamMemberController : ControllerBase
 {
     private readonly ILogger<TeamMemberController> _logger;
+    private readonly ITeamMemberContextDAO _teamMemberDAO;
 
-    private readonly AppDbContext _context;
-
-    public TeamMemberController(ILogger<TeamMemberController> logger, AppDbContext context)
+    public TeamMemberController(
+        ILogger<TeamMemberController> logger,
+        ITeamMemberContextDAO teamMemberDAO)
     {
         _logger = logger;
-        _context = context;
-    }
-
-    public IActionResult Index()
-    {
-        return View();
-    }
-
-    /* --------- CRUD METHODS FOR TEAMMEMBER MODEL --------- */
-
-    // Create the initial table ONLY USE ON INITIALIZATION
-    public IActionResult CreateTeamMemberTable()
-    {
-        // Logic to create the TeamMember table in the database
-        // Use entity framework to create the table based on the TeamMember model
-        return View("Index");
+        _teamMemberDAO = teamMemberDAO;
     }
 
     [HttpGet]
-    public IActionResult ReadTeamMembers(int? id)
+    public async Task<ActionResult<List<TeamMember>>> GetTeamMembers()
     {
-        // Logic to read TeamMember data from the database
-        // Use entity framework to retrieve data from the TeamMember table
-        if (id == null || id == 0)
+        _logger.LogInformation("Getting all team members.");
+        var teamMembers = await _teamMemberDAO.GetAllTeamMembersAsync();
+        return Ok(teamMembers);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<TeamMember>> GetTeamMember(int id)
+    {
+        _logger.LogInformation("Getting team member with ID {Id}.", id);
+        var teamMember = await _teamMemberDAO.GetTeamMemberByIdAsync(id);
+        if (teamMember == null)
         {
-            return Ok(_context.TeamMembers.Take(5).ToList());
-        }
-        var member = _context.TeamMembers.Find(id);
-        if (member == null)
-        {
+            _logger.LogWarning("Team member with ID {Id} was not found.", id);
             return NotFound();
         }
-        return Ok(member);
+        return Ok(teamMember);
     }
 
-    public IActionResult UpdateTeamMember()
+    [HttpPost]
+    public async Task<ActionResult<TeamMember>> CreateTeamMember(TeamMember teamMember)
     {
-        // Logic to update TeamMember data in the database
-        // Use entity framework to update data in the TeamMember table
-        return View("Index");
+        _logger.LogInformation("Creating a new team member.");
+        await _teamMemberDAO.AddTeamMemberAsync(teamMember);
+        return CreatedAtAction(
+            nameof(GetTeamMember),
+            new { id = teamMember.Id },
+            teamMember);
     }
 
-    public IActionResult DeleteTeamMember()
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateTeamMember(int id, TeamMember teamMember)
     {
-        // Logic to delete TeamMember data from the database
-        // Use entity framework to delete data from the TeamMember table
-        return View("Index");
+        _logger.LogInformation("Updating team member with ID {Id}.", id);
+        var existingTeamMember = await _teamMemberDAO.GetTeamMemberByIdAsync(id);
+        if (existingTeamMember == null)
+        {
+            _logger.LogWarning("Team member with ID {Id} was not found.", id);
+            return NotFound();
+        }
+        teamMember.Id = id;
+        await _teamMemberDAO.UpdateTeamMemberAsync(teamMember);
+        return NoContent();
     }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTeamMember(int id)
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        _logger.LogInformation("Deleting team member with ID {Id}.", id);
+        var existingTeamMember = await _teamMemberDAO.GetTeamMemberByIdAsync(id);
+        if (existingTeamMember == null)
+        {
+            _logger.LogWarning("Team member with ID {Id} was not found.", id);
+            return NotFound();
+        }
+        if(string.IsNullOrEmpty(existingTeamMember.FullName))
+        {
+            _logger.LogWarning("Team member with ID {Id} has an empty FullName.", id);
+            return StatusCode(500, "An error occurred while processing your request");
+
+        }
+        await _teamMemberDAO.DeleteTeamMemberAsync(id);
+        return NoContent();
     }
 }

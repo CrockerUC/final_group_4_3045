@@ -1,57 +1,109 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+using final_group_4_3045.Interfaces;
 using final_group_4_3045.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace final_group_4_3045.Controllers;
 
-public class HobbyController : Controller
+[ApiController]
+[Route("api/[controller]")]
+public class HobbyController : ControllerBase
 {
     private readonly ILogger<HobbyController> _logger;
+    private readonly IHobbyContextDAO _hobbyDAO;
 
-    public HobbyController(ILogger<HobbyController> logger)
+    public HobbyController(
+        ILogger<HobbyController> logger,
+        IHobbyContextDAO hobbyDAO)
     {
         _logger = logger;
+        _hobbyDAO = hobbyDAO;
     }
 
-    public IActionResult Index()
+    [HttpGet]
+    public async Task<ActionResult<List<Hobby>>> GetHobbies()
     {
-        return View();
+        _logger.LogInformation("Getting all hobbies.");
+
+        var hobbies = await _hobbyDAO.GetAllHobbiesAsync();
+
+        return Ok(hobbies);
     }
 
-    /* --------- CRUD METHODS FOR HOBBY MODEL --------- */
-
-    // Create the initial table ONLY USE ON INITIALIZATION
-    public IActionResult CreateHobbyTable()
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Hobby>> GetHobby(int id)
     {
-        // Logic to create the Hobby table in the database
-        // Use entity framework to create the table based on the Hobby model
-        return View("Index");
+        _logger.LogInformation("Getting hobby with ID {Id}.", id);
+
+        var hobby = await _hobbyDAO.GetHobbyByIdAsync(id);
+
+        if (hobby == null)
+        {
+            _logger.LogWarning("Hobby with ID {Id} was not found.", id);
+            return NotFound();
+        }
+
+        return Ok(hobby);
     }
 
-    public IActionResult ReadHobby(int? id)
+    [HttpPost]
+    public async Task<ActionResult<Hobby>> CreateHobby(Hobby hobby)
     {
-        // Logic to read Hobby data from the database
-        // Use entity framework to retrieve data from the Hobby table
-        return View("Index");
+        _logger.LogInformation("Creating a new hobby.");
+
+        await _hobbyDAO.AddHobbyAsync(hobby);
+
+        return CreatedAtAction(
+            nameof(GetHobby),
+            new { id = hobby.Id },
+            hobby);
     }
 
-    public IActionResult UpdateHobby()
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateHobby(
+        int id,
+        Hobby hobby)
     {
-        // Logic to update Hobby data in the database
-        // Use entity framework to update data in the Hobby table
-        return View("Index");
+        _logger.LogInformation(
+            "Updating hobby with ID {Id}.", id);
+
+        var existingHobby =
+            await _hobbyDAO.GetHobbyByIdAsync(id);
+
+        if (existingHobby == null)
+        {
+            _logger.LogWarning("Hobby with ID {Id} was not found for update.", id);
+            return NotFound();
+        }
+
+        hobby.Id = id;
+
+        await _hobbyDAO.UpdateHobbyAsync(hobby);
+
+        return NoContent();
     }
 
-    public IActionResult DeleteHobby()
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteHobby(int id)
     {
-        // Logic to delete Hobby data from the database
-        // Use entity framework to delete data from the Hobby table
-        return View("Index");
-    }
+        _logger.LogInformation(
+            "Deleting hobby with ID {Id}.", id);
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        var hobby = await _hobbyDAO.GetHobbyByIdAsync(id);
+
+        if (hobby == null)
+        {
+            _logger.LogWarning("Hobby with ID {Id} was not found for deletion.", id);
+            return NotFound();
+        }
+        if (string.IsNullOrEmpty(hobby.HobbyName))
+        {
+            _logger.LogWarning("Hobby with ID {Id} has an empty HobbyName.", id);
+            return StatusCode(500, "An error occurred while processing your request");
+        }
+
+        await _hobbyDAO.DeleteHobbyAsync(id);
+
+        return NoContent();
     }
 }
