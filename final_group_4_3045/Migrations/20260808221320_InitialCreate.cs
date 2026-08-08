@@ -15,12 +15,11 @@ namespace final_group_4_3045.Migrations
                 name: "BreakfastFoods",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Categories = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Categories = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Healthy = table.Column<bool>(type: "bit", nullable: false),
-                    Drink = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Drink = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -31,10 +30,9 @@ namespace final_group_4_3045.Migrations
                 name: "Hobbies",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    HobbyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    HobbyName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HoursPerWeek = table.Column<int>(type: "int", nullable: false),
                     Indoor = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -47,10 +45,9 @@ namespace final_group_4_3045.Migrations
                 name: "Movies",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Genre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Genre = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ReleaseYear = table.Column<int>(type: "int", nullable: false),
                     Rating = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
@@ -63,12 +60,11 @@ namespace final_group_4_3045.Migrations
                 name: "TeamMembers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CollegeProgram = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    YearInProgram = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CollegeProgram = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    YearInProgram = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
